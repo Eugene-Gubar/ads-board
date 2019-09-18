@@ -1,0 +1,32 @@
+<!--View associated to userDashboard action of UserDashboardController controller -->
+
+{% block user_dashboard_block %}
+<div class="section">
+    <h1 class="title">Dashboard</h1>
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-three-fifths">
+                <table class="table is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Title</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ad in [{"title": "Buy new a table", "url_edit": "/edit/{id}"}, 
+                                      {"title": "Sell old a table", "url_edit": "/edit/{id}"}] %}
+                            <tr>
+                                <th>{{loop.index}}</th>
+                                <td>{{ad["title"]}}</td>
+                                <td><a class="button is-success" href="{{ad["url_edit"]}}" target="_blank">Edit</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

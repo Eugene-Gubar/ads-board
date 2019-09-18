@@ -10,16 +10,16 @@ use Ubiquity\utils\http\URequest;
 class SignUpUserController extends ControllerBase
 {
 
-	public function index()
-	{ }
+    public function index()
+    { }
 
-	/**
-	 *@route("/signup")
-	 **/
-	public function signUp()
-	{
-		// $rpData = URequest::getPost();
-		// echo '<pre>'.print_r($rpData).'</pre>';
-		$this->loadView('SignUpUserController/signUp.html');
-	}
+    /**
+     *@route("/signup")
+     **/
+    public function signUp()
+    {
+        // $rpData = URequest::getPost();
+        // echo '<pre>'.print_r($rpData).'</pre>';
+        $this->loadView('SignUpUserController/signUp.html');
+    }
 }
