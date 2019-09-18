@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block header %}
+	<base href="{{config["siteUrl"]}}">
+	<meta charset="UTF-8">
+	<title>board</title>
+{% endblock %}
+{% block css %}
+	{{css('css/style.css') | raw}}
+{% endblock %}
+</head>
+<body>
+{% block head %}
+{% endblock %}
