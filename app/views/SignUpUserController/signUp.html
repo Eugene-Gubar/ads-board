@@ -1,0 +1,65 @@
+<!--View associated to signUp action of SignUpUserController controller -->
+
+
+{% block form_signup_block %}
+
+<div class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-three-fifths">
+                <div class="notification is-success">
+                    <h2 class="title">Sign up</h2>
+                </div>
+                <form action="/signup" method="post">
+                    <div class="field">
+                        <label for="name" class="label is-medium">Name</label>
+                        <div class="control">
+                            <input id="name" name="name" class="input is-medium" type="text" placeholder="Name">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="lastname" class="label is-medium">Lastname</label>
+                        <div class="control">
+                            <input id="lastname" name="lastname" class="input is-medium" type="text"
+                                placeholder="Lastname">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="email" class="label is-medium">Email</label>
+                        <div class="control">
+                            <input id="email" name="email" class="input is-medium" type="email"
+                                placeholder="Your Email">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="password" class="label is-medium">Password</label>
+                        <p class="control">
+                            <input id="password" name="password" class="input is-medium" type="password"
+                                placeholder="Password">
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label for="confirm" class="label is-medium">Confirm password</label>
+                        <p class="control">
+                            <input id="confirm" name="confirm" class="input is-medium" type="password"
+                                placeholder="Confirm password">
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input type="submit" class="is-medium button is-success" value="Submit">
+                            <!-- <button class="is-medium button is-success">Submit</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

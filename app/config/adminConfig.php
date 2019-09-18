@@ -42,5 +42,5 @@ return array(
 			),
 	"email"=>"dev@dev.dev",
 	"password"=>"admin",
-	"role"=>"Editor"
+	"role"=>"Admin"
 	);
