@@ -9,7 +9,7 @@ use Ubiquity\controllers\Startup;
 
 /**
  * Auth Controller BasicAuthController
- * @route("/login-admin","inherited"=>true,"automated"=>true)
+ * @route("/login","inherited"=>true,"automated"=>true)
  **/
 class BasicAuthController extends \Ubiquity\controllers\auth\AuthController
 {
@@ -91,6 +91,6 @@ class BasicAuthController extends \Ubiquity\controllers\auth\AuthController
 
 	public function _getBaseRoute()
 	{
-		return '/login-admin';
+		return '/login';
 	}
 }
