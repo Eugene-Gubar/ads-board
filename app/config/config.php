@@ -3,11 +3,11 @@ return array(
 	"siteUrl" => "http://127.0.0.1/board/",
 	"database" => [
 		"type" => "mysql",
-		"dbName" => "",
+		"dbName" => "board",
 		"serverName" => "127.0.0.1",
 		"port" => "3306",
-		"user" => "root",
-		"password" => "",
+		"user" => "nativeuser",
+		"password" => "password",
 		"options" => [],
 		"cache" => false
 	],

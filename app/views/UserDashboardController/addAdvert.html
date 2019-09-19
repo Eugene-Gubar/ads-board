@@ -1,0 +1,45 @@
+<!--View associated to addAdvert action of UserDashboardController controller -->
+
+{% block add_advert_block %}
+
+<div class="section">
+
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-three-fifths">
+                <div class="notification is-success">
+                    <h1 class="title">Add your advert</h1>
+                </div>
+                <form action="/add" method="post" enctype="multipart/form-data">
+                    <div class="field">
+                        <label for="title" class="label is-medium">Title*</label>
+                        <div class="control">
+                            <input id="title" name="title" class="input is-medium" type="text" placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="body" class="label is-medium">Description</label>
+                        <div class="control">
+                            <textarea id="body" name="body" class="textarea is-medium"
+                                placeholder="Write a description"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label for="image">Upload image cover:</label>
+                        <br>
+                        <input id="image" name="image" type="file" accept=".jpg, .jpeg, .png">
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input type="submit" class="is-medium button is-success" value="Submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

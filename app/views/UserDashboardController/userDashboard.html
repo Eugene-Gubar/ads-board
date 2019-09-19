@@ -11,7 +11,7 @@
                         <tr>
                             <th>№</th>
                             <th>Title</th>
-                            <th>Edit</th>
+                            <th>Managment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -20,7 +20,10 @@
                             <tr>
                                 <th>{{loop.index}}</th>
                                 <td>{{ad["title"]}}</td>
-                                <td><a class="button is-success" href="{{ad["url_edit"]}}" target="_blank">Edit</a></td>
+                                <td>
+                                    <a class="button is-success" href="{{ad["url_update"]}}" target="_blank">Edit</a>
+                                    <a class="button is-danger" href="{{ad["url_remove"]}}" target="_blank">Delete</a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
