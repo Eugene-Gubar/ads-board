@@ -21,6 +21,6 @@ class IndexController extends ControllerBase
        echo '<pre>'.print_r(USession::getAll()).'</pre><br>';
        $sUser = USession::get('activeUser');
     //    $sRole = $sUser->getRole();
-       echo $sUser;
+       echo print_r($sUser);
     }
 }

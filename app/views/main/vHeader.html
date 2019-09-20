@@ -16,6 +16,8 @@
 <body>
     {% block head %}
 
+    {% set sessRole = (app.getSession().get('activeUser')).role %}
+
     <div class="section">
 
         <nav class="navbar is-light" role="navigation" aria-label="main navigation">
@@ -29,25 +31,31 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a class="button is-success" href="/signup">
-                                <strong>Sign up</strong>
+                            {% if sessRole is not empty %}
+                            
+                            {% if sessRole == 'Editor' %}
+                            <a class="button is-light is-info" href="/user-dashboard">
+                                Dashboard
                             </a>
-                            {% if auth %}
-                                <a class="button is-light is-info" href="/user-dashboard">
-                                    Dashboard
-                                </a>
+                            {% elseif sessRole == 'Admin' %}
+                            <a class="button is-light is-danger" href="/admin">
+                                Admin panel
+                            </a>
+                            {% endif %}
+                            <a class="button is-light is-dark" href="/login/terminate">Log out</a>
+                            
                             {% else %}
+                                <a class="button is-success" href="/signup">
+                                    <strong>Sign up</strong>
+                                </a>
                                 <a class="button is-light" href="/login">
                                     Log in
                                 </a>
                             {% endif %}
-                            
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
-
     </div>
-
     {% endblock %}

@@ -65,7 +65,6 @@ class SignUpUserController extends ControllerBase
                 if (sizeof($violations) > 0) {
 
                     Logger::warn('Sign up', 'An unsuccessful attempt to register a user. Invalid data fields.');
-
                 } else {
                     if (DAO::getOne(User::class, 'email=?', false, [$postUser["email"]])) {
                         array_push($violations, 'This mail is already available.');
@@ -80,10 +79,11 @@ class SignUpUserController extends ControllerBase
             }
         }
 
-        if (sizeof($violations) > 0) {
+        if (is_array($violations) && sizeof($violations) > 0) {
             $vio = explode('~]*', implode('~]*', $violations));
         }
 
         $this->loadView('SignUpUserController/signUp.html', compact('vio', 'success'));
     }
+
 }

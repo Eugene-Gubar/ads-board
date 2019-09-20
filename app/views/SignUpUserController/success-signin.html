@@ -1,0 +1,17 @@
+{% block success_signin_block %}
+
+<br>
+<br>
+
+<div class="ui message">
+    <div class="header">
+        <p>Success.</p>
+    </div>
+    <p>You are logged in as: <strong>{{user.name}}</strong></p>
+    <p>Permissions for your account: <strong>{{user.role}}</strong></p>
+    <p>Press to continue for your <a href="{{ user.role == 'Admin' ? '/admin' : '/user-dashboard' }}">account page</a></p>
+    <p>Press to continue for <a href="/">main page</a></p>
+</div>
+
+
+{% endblock %}
