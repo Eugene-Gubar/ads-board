@@ -10,9 +10,9 @@
                 <div class="notification is-success">
                     <h2 class="title">Sign up</h2>
                 </div>
-                
+
                 {% if vio or success %}
-                <article class="message {{ vio ? 'is-danger' : 'is-link' }}">
+                <article class="message {{ vio is empty ? 'is-link' : 'is-danger' }}">
                     <div class="message-header">
                         <p>{{ vio ? 'Incorrect data fields:' : 'Thank you for registering' }}</p>
                     </div>

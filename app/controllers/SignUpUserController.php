@@ -80,7 +80,9 @@ class SignUpUserController extends ControllerBase
             }
         }
 
-        $vio = explode('~]*', implode('~]*', $violations));
+        if (sizeof($violations) > 0) {
+            $vio = explode('~]*', implode('~]*', $violations));
+        }
 
         $this->loadView('SignUpUserController/signUp.html', compact('vio', 'success'));
     }
