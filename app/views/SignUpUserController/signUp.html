@@ -10,6 +10,28 @@
                 <div class="notification is-success">
                     <h2 class="title">Sign up</h2>
                 </div>
+                
+                {% if vio or success %}
+                <article class="message {{ vio ? 'is-danger' : 'is-link' }}">
+                    <div class="message-header">
+                        <p>{{ vio ? 'Incorrect data fields:' : 'Thank you for registering' }}</p>
+                    </div>
+                    <div class="message-body">
+                        
+                        {% if success %}
+                        <p>You can now log in. For log in to enter, use the link below or check back later.</p>
+                        <br>
+                        <a href="/login" class="button">Log in</a>
+                        {% endif %}
+                        
+                        {% for i in vio %}
+                            <p>{{i}}</p>
+                        {% endfor %}
+
+                    </div>
+                </article>
+                {% endif %}
+                
                 <form action="/signup" method="post">
                     <div class="field">
                         <label for="name" class="label is-medium">Name*</label>
@@ -37,8 +59,7 @@
                     <div class="field">
                         <label for="phone" class="label is-medium">Phone*</label>
                         <div class="control">
-                            <input id="phone" name="phone" class="input is-medium" type="text"
-                                placeholder="Phone">
+                            <input id="phone" name="phone" class="input is-medium" type="text" placeholder="Phone">
                         </div>
                     </div>
 

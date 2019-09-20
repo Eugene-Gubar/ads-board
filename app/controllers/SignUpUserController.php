@@ -5,8 +5,9 @@ namespace controllers;
 use Ubiquity\utils\http\URequest;
 
 use models\User;
-
 use Ubiquity\orm\DAO;
+
+use Ubiquity\log\Logger;
 
 use Ubiquity\contents\validation\ValidatorsManager;
 
@@ -25,6 +26,10 @@ class SignUpUserController extends ControllerBase
      **/
     public function signUp()
     {
+
+        $vio = [];
+        $success = [];
+
         if (URequest::isPost()) {
             $postUser = URequest::getPost();
             if ($postUser) {
@@ -59,24 +64,24 @@ class SignUpUserController extends ControllerBase
 
                 if (sizeof($violations) > 0) {
 
-                    echo implode('<br>', $violations);
+                    Logger::warn('Sign up', 'An unsuccessful attempt to register a user. Invalid data fields.');
 
                 } else {
                     if (DAO::getOne(User::class, 'email=?', false, [$postUser["email"]])) {
-                        echo 'This mail is already available.<br>';
-                        // echo '<pre>'.print_r($user).'</pre>';
+                        array_push($violations, 'This mail is already available.');
                     } else {
                         if (DAO::save($user)) {
-                            echo 'The user was added to the database.<br>';
+                            array_push($success, 'The user was added to the database');
                         } else {
-                            echo 'fail added to db';
-                            echo '<pre>' . print_r($user) . '</pre>';
+                            array_push($violations, 'Fail added to db. Please try again');
                         }
                     }
                 }
             }
         }
 
-        $this->loadView('SignUpUserController/signUp.html');
+        $vio = explode('~]*', implode('~]*', $violations));
+
+        $this->loadView('SignUpUserController/signUp.html', compact('vio', 'success'));
     }
 }

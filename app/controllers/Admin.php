@@ -22,9 +22,9 @@ class Admin extends UbiquityMyAdminBaseController
             $sRole = USession::get('activeUser');
             if ($sRole === 'Admin') return true;
         }
-        // return USession::exists('activeUser');
+        return USession::exists('activeUser');
         // if role = Admin return true;
-        return false;
+        // return true;
     }
 
     public function onInvalidControl()
