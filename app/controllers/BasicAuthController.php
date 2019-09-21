@@ -20,26 +20,22 @@ use Ubiquity\utils\flash\FlashMessage;
  **/
 class BasicAuthController extends \Ubiquity\controllers\auth\AuthController
 {
-
-    public function _getUserSessionKey()
-    {
-        return 'activeUser';
-    }
-
     protected function onConnect($connected)
     {
+        $sKey = $this->_getUserSessionKey();
         $urlParts = $this->getOriginalURL();
-        USession::set($this->_getUserSessionKey(), $connected);
+        
+        USession::set($sKey, $connected);
         if (isset($urlParts)) {
             $this->_forward(implode('/', $urlParts));
         } else {
-            $user = USession::get('activeUser');
-            if (USession::exists('activeUser') && USession::get('activeUser') === 'Admin') {
-                // Startup::forward('admin');
+            if (USession::exists($sKey)) {
+                $user = USession::get($sKey);
                 $this->loadView('SignUpUserController/success-signin.html', compact('user'));
+                // Startup::forward('admin');
+            } else {
+                Startup::forward('_default');
             }
-            // Startup::forward('_default');
-            $this->loadView('SignUpUserController/success-signin.html', compact('user'));
         }
     }
 

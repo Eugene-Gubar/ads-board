@@ -6,7 +6,6 @@ class Ads
 {
 	/**
 	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
-	 * @validator("notNull")
 	 **/
 	private $id;
 

@@ -10,6 +10,22 @@
                 <div class="notification is-success">
                     <h1 class="title">Add your advert</h1>
                 </div>
+
+                {% if vio or success %}
+                <article class="message {{ vio is empty ? 'is-link' : 'is-danger' }}">
+                    <div class="message-header">
+                        <p>{{ vio ? 'Incorrect data fields:' : 'You have successfully added a new advert.' }}</p>
+                    </div>
+                    <div class="message-body">
+                        
+                        {% for i in vio %}
+                            <p>{{i}}</p>
+                        {% endfor %}
+
+                    </div>
+                </article>
+                {% endif %}
+
                 <form action="/add" method="post" enctype="multipart/form-data">
                     <div class="field">
                         <label for="title" class="label is-medium">Title*</label>

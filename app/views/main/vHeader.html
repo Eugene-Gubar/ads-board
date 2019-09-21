@@ -32,17 +32,17 @@
                     <div class="navbar-item">
                         <div class="buttons">
                             {% if sessRole is not empty %}
+                                <a class="button is-light is-info" href="/user-dashboard">
+                                    Dashboard
+                                </a>
                             
-                            {% if sessRole == 'Editor' %}
-                            <a class="button is-light is-info" href="/user-dashboard">
-                                Dashboard
-                            </a>
-                            {% elseif sessRole == 'Admin' %}
-                            <a class="button is-light is-danger" href="/admin">
-                                Admin panel
-                            </a>
-                            {% endif %}
-                            <a class="button is-light is-dark" href="/login/terminate">Log out</a>
+                                {% if sessRole == 'Admin' %}
+                                <a class="button is-light is-danger" href="/admin">
+                                    Admin panel
+                                </a>
+                                {% endif %}
+
+                                <a class="button is-light is-dark" href="/login/terminate">Log out</a>
                             
                             {% else %}
                                 <a class="button is-success" href="/signup">

@@ -19,8 +19,8 @@ class IndexController extends ControllerBase
     public function viewSession()
     {
        echo '<pre>'.print_r(USession::getAll()).'</pre><br>';
-       $sUser = USession::get('activeUser');
+    //    $sUser = USession::get('activeUser');
     //    $sRole = $sUser->getRole();
-       echo print_r($sUser);
+    //    echo print_r(USession::get('activeUser')->getId());
     }
 }
