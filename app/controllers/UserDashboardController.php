@@ -29,7 +29,10 @@ class UserDashboardController extends ControllerBase
      **/
     public function userDashboard()
     {
-        $this->loadView("UserDashboardController/userDashboard.html");
+
+        $ads = DAO::getOne(User::class, USession::get('activeUser')->getId())->getAdss();
+
+        $this->loadView('UserDashboardController/userDashboard.html', compact('ads'));
     }
 
     /**
@@ -72,12 +75,12 @@ class UserDashboardController extends ControllerBase
                             array_push($violations, 'Only JPG, JPEG, PNG files are allowed');
                         }
 
-                        $iFileHashName = $t_dir.basename($iHashName).'.'.$iType;
+                        $iFileHashName = $t_dir . basename($iHashName) . '.' . $iType;
 
                         if (file_exists($iFileHashName)) {
                             array_push($violations, 'File already exists. Try to change name file');
                         } else {
-                            
+
                             if (!(move_uploaded_file($_FILES['image']['tmp_name'], $iFileHashName))) {
                                 array_push($violations, 'Failed to write file to server. Try again');
                             }
@@ -85,11 +88,11 @@ class UserDashboardController extends ControllerBase
                     }
 
                     if (!(is_array($violations) && sizeof($violations) > 0)) {
-                        
+
                         $user = DAO::uGetOne(User::class, USession::get('activeUser')->getId(), false);
 
                         $adv->setUser($user);
-                       
+
                         try {
                             if (DAO::save($adv)) {
                                 array_push($success, 'The new Advert was added.');
@@ -98,11 +101,8 @@ class UserDashboardController extends ControllerBase
                         } catch (\Throwable $th) {
                             Logger::error('DATABASE', 'Failed to add a new user to the database. Please try again');
                         }
-                        
                     }
-
                 }
-                
             }
         }
 
@@ -121,7 +121,7 @@ class UserDashboardController extends ControllerBase
 
 
 
-        $this->loadView("UserDashboardController/updateAdvert.html", compact("id"));
+        $this->loadView('UserDashboardController/updateAdvert.html', compact('id'));
     }
 
     /**

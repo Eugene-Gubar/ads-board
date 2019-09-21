@@ -5,6 +5,7 @@ namespace models;
 class Ads
 {
 	/**
+	 * @id
 	 * @column("name"=>"id","nullable"=>false,"dbType"=>"int(11)")
 	 **/
 	private $id;

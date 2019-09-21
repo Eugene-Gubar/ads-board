@@ -16,14 +16,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for ad in [{"title": "Buy new a table", "url_edit": "/edit/{id}"}, 
-                                      {"title": "Sell old a table", "url_edit": "/edit/{id}"}] %}
+                        {% for ad in ads %}
                             <tr>
                                 <th>{{loop.index}}</th>
-                                <td>{{ad["title"]}}</td>
+                                <td><a href="/view/{{ad.id}}" target="_blank">{{ ad.title[0:75] }}</a></td>
                                 <td>
-                                    <a class="button is-success" href="{{ad["url_update"]}}" target="_blank">Edit</a>
-                                    <a class="button is-danger" href="{{ad["url_remove"]}}" target="_blank">Delete</a>
+                                    <a class="button is-success" href="/update/{{ad.id}}" target="_blank">Edit</a>
+                                    <a class="button is-danger" href="/remove/{{ad.id}}" target="_blank">Delete</a>
                                 </td>
                             </tr>
                         {% endfor %}
