@@ -10,6 +10,8 @@ use Ubiquity\utils\base\UFileSystem;
 use Ubiquity\contents\validation\ValidatorsManager;
 use Ubiquity\log\Logger;
 
+use Ubiquity\utils\http\UResponse;
+
 use Ubiquity\orm\DAO;
 
 use models\Ads;
@@ -125,10 +127,42 @@ class UserDashboardController extends ControllerBase
     }
 
     /**
-     *@route("/remove/{id}","methods"=>["get"])
+     *@route("/remove/{id}","requirements"=>["id"=>"\d+"], "methods"=>["get"])
      **/
     public function removeAdvert($id)
-    { }
+    {
+
+        if (is_int(intval($id))) {
+
+            try {
+                $idUserAd = (DAO::getOne(Ads::class, $id))->getUser()->getId();
+
+                if ($idUserAd === USession::get('activeUser')->getId()) {
+                    if (DAO::delete(Ads::class, $id)) {
+                        echo 'Advert deleted from database';
+                        Logger::info('Delete', 'Remove advert id: '.$id.' for user id: '.$idUserAd.' from database');
+                        UResponse::header('Messages', 'Gone', false, 410);
+                    }
+                } else {
+                    echo 'Forbidden. The request is not allowed.';
+                    Logger::info('Forbidden', 'Remove advert id: '.$id.' for user id: '.$idUserAd.' Not allowed.');
+                    UResponse::header('Messages', 'Forbidden', false, 403);
+                }
+            } catch (\PDOException $e) {
+                UResponse::header('Messages', 'Internal Server Error', false, 500);
+                Logger::error('DAOUpdates', $e->getMessage(), 'Delete');
+
+            } catch (\Exception $e) {
+                UResponse::header('Messages', 'Internal Server Error', false, 500);
+                Logger::error('Caught Exception', $e->getMessage());
+            }
+
+        } else {
+            echo 'Bad Request';
+            UResponse::header('Messages', 'Bad Request', false, 400);
+        }
+
+    }
 
 
     public function isValid($action)
