@@ -60,9 +60,8 @@ class UserDashboardController extends ControllerBase
 
                 if (mb_strlen($pAdvertForm['title']) <= 12) {
                     array_push($violations, 'title: Title must be longer than 12 characters');
-                } else {
+                } elseif (sizeof($violations) === 0) {
 
-                    $iHashName = NULL;
                     if ($_FILES['image']['size'] > 0) {
                         $t_dir = UFileSystem::cleanPathname('public/assets/img/');
                         $t_file = UFileSystem::cleanFilePathname($t_dir . basename($_FILES['image']['name']));
@@ -73,8 +72,8 @@ class UserDashboardController extends ControllerBase
                             array_push($violations, 'File is too large');
                         }
 
-                        if ($iType != 'jpg' && $iType != 'png' && $iType != 'jpeg') {
-                            array_push($violations, 'Only JPG, JPEG, PNG files are allowed');
+                        if ($iType != 'webp' && $iType != 'jpg' && $iType != 'png' && $iType != 'jpeg') {
+                            array_push($violations, 'Only .WEBP .JPG, .JPEG, .PNG extension files are allowed');
                         }
 
                         $iFileHashName = $t_dir . basename($iHashName) . '.' . $iType;
@@ -83,7 +82,10 @@ class UserDashboardController extends ControllerBase
                             array_push($violations, 'File already exists. Try to change name file');
                         } else {
 
-                            if (!(move_uploaded_file($_FILES['image']['tmp_name'], $iFileHashName))) {
+                            if (move_uploaded_file($_FILES['image']['tmp_name'], $iFileHashName)) {
+                                $adv->setImageName($iHashName);
+                                $adv->setImageType($iType);
+                            } else {
                                 array_push($violations, 'Failed to write file to server. Try again');
                             }
                         }
@@ -100,8 +102,8 @@ class UserDashboardController extends ControllerBase
                                 array_push($success, 'The new Advert was added.');
                                 Logger::info('DATABASE', 'The new Advert was added to the database');
                             }
-                        } catch (\Throwable $th) {
-                            Logger::error('DATABASE', 'Failed to add a new user to the database. Please try again');
+                        } catch (\Exception $e) {
+                            Logger::error('DATABASE', 'Failed to add a new user to the database. Please try again', $e->getMessage());
                         }
                     }
                 }
@@ -132,13 +134,20 @@ class UserDashboardController extends ControllerBase
     public function removeAdvert($id)
     {
 
-        if (is_int(intval($id))) {
+        if (is_int(intval($id)) && $adv = DAO::getOne(Ads::class, $id)) {
+            $t_dir = UFileSystem::cleanPathname('public/assets/img/');
 
             try {
-                $idUserAd = (DAO::getOne(Ads::class, $id))->getUser()->getId();
+                // $adv = DAO::getOne(Ads::class, $id);
 
+                $imageHashName = $adv->getImageName();
+                $imageType = $adv->getImageType();
+                $idUserAd = $adv->getUser()->getId();
+                echo 'asdf';
                 if ($idUserAd === USession::get('activeUser')->getId()) {
                     if (DAO::delete(Ads::class, $id)) {
+                        UFileSystem::deleteFile($t_dir.$imageHashName.'.'.$imageType);
+
                         echo 'Advert deleted from database';
                         Logger::info('Delete', 'Remove advert id: '.$id.' for user id: '.$idUserAd.' from database');
                         UResponse::header('Messages', 'Gone', false, 410);

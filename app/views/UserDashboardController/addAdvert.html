@@ -12,17 +12,21 @@
                 </div>
 
                 {% if vio or success %}
-                <article class="message {{ vio is empty ? 'is-link' : 'is-danger' }}">
+                <article class="message {{ vio ? 'is-danger' : 'is-link' }}">
                     <div class="message-header">
                         <p>{{ vio ? 'Incorrect data fields:' : 'You have successfully added a new advert.' }}</p>
                     </div>
-                    <div class="message-body">
-                        
-                        {% for i in vio %}
-                            <p>{{i}}</p>
-                        {% endfor %}
+                    
+                    {% if vio %}
+                        <div class="message-body">
+                            
+                            {% for i in vio %}
+                                <p>{{i}}</p>
+                            {% endfor %}
 
-                    </div>
+                        </div>
+                    {% endif %}
+                    
                 </article>
                 {% endif %}
 

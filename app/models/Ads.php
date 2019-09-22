@@ -29,6 +29,11 @@ class Ads
 	private $imageName;
 
 	/**
+	 * @column("name"=>"imageType","nullable"=>true,"dbType"=>"enum('jpg','png','jpeg','webp')")
+	 **/
+	private $imageType;
+
+	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\User","name"=>"id_user","nullable"=>false)
 	 **/
@@ -72,6 +77,16 @@ class Ads
 	public function setImageName($imageName)
 	{
 		$this->imageName = $imageName;
+	}
+
+	public function getImageType()
+	{
+		return $this->imageType;
+	}
+
+	public function setImageType($imageType)
+	{
+		$this->imageType = $imageType;
 	}
 
 	public function getUser()
