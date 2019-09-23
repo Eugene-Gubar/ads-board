@@ -47,67 +47,70 @@ class UserDashboardController extends ControllerBase
         $success = [];
         $violations = [];
 
-        if (URequest::isPost()) {
-            $pAdvertForm = URequest::getPost();
+        $sessIdUser = USession::get('activeUser')->getId();
 
-            if ($pAdvertForm) {
-                $adv = new Ads();
+        if (URequest::isPost() && $pAdvertForm = URequest::getPost()) {
 
-                $adv->setTitle($pAdvertForm['title']);
-                $adv->setBody($pAdvertForm['body']);
+            $adv = new Ads();
 
-                $violations = ValidatorsManager::validate($adv);
+            $adv->setTitle($pAdvertForm['title']);
+            $adv->setBody($pAdvertForm['body']);
 
-                if (mb_strlen($pAdvertForm['title']) <= 12) {
-                    array_push($violations, 'title: Title must be longer than 12 characters');
-                } elseif (sizeof($violations) === 0) {
+            $violations = ValidatorsManager::validate($adv);
 
-                    if ($_FILES['image']['size'] > 0) {
-                        $t_dir = UFileSystem::cleanPathname('public/assets/img/');
-                        $t_file = UFileSystem::cleanFilePathname($t_dir . basename($_FILES['image']['name']));
-                        $iType = strtolower(pathinfo($t_file, PATHINFO_EXTENSION));
-                        $iHashName = md5(pathinfo($_FILES['image']['name'], PATHINFO_FILENAME));
+            if (mb_strlen($pAdvertForm['title']) <= 12) {
+                array_push($violations, 'title: Title must be longer than 12 characters');
+            } elseif (sizeof($violations) === 0) {
 
-                        if ($_FILES['image']['size'] > 5000000) {
-                            array_push($violations, 'File is too large');
-                        }
+                if ($_FILES['image']['size'] > 0) {
+                    $t_dir = UFileSystem::cleanPathname('public/assets/img/');
+                    $t_file = UFileSystem::cleanFilePathname($t_dir . basename($_FILES['image']['name']));
+                    $iType = strtolower(pathinfo($t_file, PATHINFO_EXTENSION));
+                    $iHashName = md5(pathinfo($_FILES['image']['name'], PATHINFO_FILENAME));
 
-                        if ($iType != 'webp' && $iType != 'jpg' && $iType != 'png' && $iType != 'jpeg') {
-                            array_push($violations, 'Only .WEBP .JPG, .JPEG, .PNG extension files are allowed');
-                        }
-
-                        $iFileHashName = $t_dir . basename($iHashName) . '.' . $iType;
-
-                        if (file_exists($iFileHashName)) {
-                            array_push($violations, 'File already exists. Try to change name file');
-                        } else {
-
-                            if (move_uploaded_file($_FILES['image']['tmp_name'], $iFileHashName)) {
-                                $adv->setImageName($iHashName);
-                                $adv->setImageType($iType);
-                            } else {
-                                array_push($violations, 'Failed to write file to server. Try again');
-                            }
-                        }
+                    if ($_FILES['image']['size'] > 5000000) {
+                        array_push($violations, 'File is too large');
                     }
 
-                    if (!(is_array($violations) && sizeof($violations) > 0)) {
+                    if ($iType != 'webp' && $iType != 'jpg' && $iType != 'png' && $iType != 'jpeg') {
+                        array_push($violations, 'Only .WEBP .JPG, .JPEG, .PNG extension files are allowed');
+                    }
 
-                        $user = DAO::uGetOne(User::class, USession::get('activeUser')->getId(), false);
+                    $iFileHashName = $t_dir . basename($iHashName) . '.' . $iType;
 
-                        $adv->setUser($user);
+                    if (file_exists($iFileHashName)) {
+                        array_push($violations, 'File already exists. Try to change name file');
+                    } elseif (is_array($violations) && sizeof($violations) === 0) {
 
-                        try {
-                            if (DAO::save($adv)) {
-                                array_push($success, 'The new Advert was added.');
-                                Logger::info('DATABASE', 'The new Advert was added to the database');
-                            }
-                        } catch (\Exception $e) {
-                            Logger::error('DATABASE', 'Failed to add a new user to the database. Please try again', $e->getMessage());
+                        if (move_uploaded_file($_FILES['image']['tmp_name'], $iFileHashName)) {
+                            $adv->setImageName($iHashName);
+                            $adv->setImageType($iType);
+                        } else {
+                            array_push($violations, 'Failed to write file to server. Try again');
                         }
                     }
                 }
+
+                if (is_array($violations) && sizeof($violations) === 0) {
+
+                    $user = DAO::uGetOne(User::class, USession::get('activeUser')->getId(), false);
+                    $adv->setUser($user);
+
+                    try {
+                        if (DAO::save($adv)) {
+                            array_push($success, 'The new Advert was added.');
+                            Logger::info('Database', 'The new Advert was added to the database from user id: '.$sessIdUser);
+                        }
+                    } catch (\PDOException $e) {
+                        UResponse::header('Messages', 'Internal Server Error', false, 500);
+                        Logger::error('Database', 'Failed add a new Advert in the database for user id: '.$sessIdUser, $e->getMessage());
+                    } catch (\Exception $e) {
+                        UResponse::header('Messages', 'Internal Server Error', false, 500);
+                        Logger::error('Caught Exception', $e->getMessage());
+                    }
+                }
             }
+
         }
 
         if (is_array($violations) && sizeof($violations) > 0) {
@@ -123,9 +126,101 @@ class UserDashboardController extends ControllerBase
     public function updateAdvert($id)
     {
 
+        $violations = [];
+        $vio = [];
+        $success = [];
+        $advert = [];
 
+        $sessIdUser = USession::get('activeUser')->getId();
 
-        $this->loadView('UserDashboardController/updateAdvert.html', compact('id'));
+        if (is_int(intval($id)) && $adv = DAO::getOne(Ads::class, $id)) {
+
+            if (URequest::isPost() && $pAdvertForm = URequest::getPost()) {
+
+                $adv->setTitle($pAdvertForm['title']);
+                $adv->setBody($pAdvertForm['body']);
+
+                $violations = ValidatorsManager::validate($adv);
+
+                if (mb_strlen($pAdvertForm['title']) <= 12) {
+                    array_push($violations, 'title: Title must be longer than 12 characters');
+
+                } elseif (sizeof($violations) === 0) {
+                    
+                    if (file_exists($_FILES['image']['tmp_name']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+                        if ($_FILES['image']['size'] > 0 && $_FILES['image']['size'] <= 5000000) {
+                            $dbOldImageName = $adv->getImageName();
+                            $dbOldImageType = $adv->getImageType();
+
+                            $t_dir = UFileSystem::cleanPathname('public/assets/img/');
+                            $t_file = UFileSystem::cleanFilePathname($t_dir . basename($_FILES['image']['name']));
+                            $newImageType = strtolower(pathinfo($t_file, PATHINFO_EXTENSION));
+                            $newImageName = md5(pathinfo($_FILES['image']['name'], PATHINFO_FILENAME));
+                            $newImage = $t_dir . basename($newImageName) . '.' . $newImageType;
+
+                            if ($newImageType != 'webp' && $newImageType != 'jpg' && $newImageType != 'png' && $newImageType != 'jpeg') {
+                                array_push($violations, 'Only .WEBP .JPG, .JPEG, .PNG extension files are allowed');
+                            }
+                            
+                            if (is_array($violations) && sizeof($violations) === 0) {
+                                if (move_uploaded_file($_FILES['image']['tmp_name'], $newImage)) {
+                                    UFileSystem::deleteFile($t_dir.$dbOldImageName.'.'.$dbOldImageType);
+                                    $adv->setImageName($newImageName);
+                                    $adv->setImageType($newImageType);
+                                } else {
+                                    array_push($violations, 'Failed to write file to server. Try again');
+                                }
+                            }
+                            
+                        } else {
+                            array_push($violations, 'File is too large');
+                        }
+                    }
+                    
+
+                    if (is_array($violations) && sizeof($violations) === 0) {
+
+                        try {
+                            if (DAO::save($adv)) {
+                                array_push($success, 'The Advert was updated.');
+                                Logger::info('Database', 'The Advert was updated in the database for user id: '.$sessIdUser);
+                                echo 'The Advert was updated.';
+                            }
+                        } catch (\PDOException $e) {
+                            UResponse::header('Messages', 'Internal Server Error', false, 500);
+                            Logger::error('Database', 'Failed update Advert in the database for user id: '.$sessIdUser, $e->getMessage());
+                        } catch (\Exception $e) {
+                            UResponse::header('Messages', 'Internal Server Error', false, 500);
+                            Logger::error('Caught Exception', $e->getMessage());
+                        }
+                        
+                    }
+                }
+            }
+
+            $idUserAd = $adv->getUser()->getId();
+            if ($idUserAd === $sessIdUser) {
+                $advert = $adv;
+                
+                // echo '<pre>'.print_r($advert).'</pre>';
+
+            } else {
+                UResponse::header('Messages', 'Forbidden', false, 403);
+                Logger::info('Forbidden', 'The request is not allowed id: ' . $id . ' for user id: ' . $sessIdUser);
+                echo 'Forbidden. The request is not allowed.';
+            }
+
+        } else {
+            UResponse::header('Messages', 'Bad Request', false, 400);
+            Logger::info('Bad request', 'The request id: ' . $id . ' for user id: ' . $sessIdUser);
+            echo 'Bad Request';
+        }
+        
+        if (is_array($violations) && sizeof($violations) > 0) {
+            $vio = explode('~]*', implode('~]*', $violations));
+        }
+
+        $this->loadView('UserDashboardController/updateAdvert.html', compact('advert', 'vio', 'success'));
     }
 
     /**
@@ -136,6 +231,7 @@ class UserDashboardController extends ControllerBase
 
         if (is_int(intval($id)) && $adv = DAO::getOne(Ads::class, $id)) {
             $t_dir = UFileSystem::cleanPathname('public/assets/img/');
+            $sessIdUser = USession::get('activeUser')->getId();
 
             try {
                 // $adv = DAO::getOne(Ads::class, $id);
@@ -143,23 +239,23 @@ class UserDashboardController extends ControllerBase
                 $imageHashName = $adv->getImageName();
                 $imageType = $adv->getImageType();
                 $idUserAd = $adv->getUser()->getId();
-                echo 'asdf';
-                if ($idUserAd === USession::get('activeUser')->getId()) {
+
+                if ($idUserAd === $sessIdUser) {
                     if (DAO::delete(Ads::class, $id)) {
                         UFileSystem::deleteFile($t_dir.$imageHashName.'.'.$imageType);
 
-                        echo 'Advert deleted from database';
-                        Logger::info('Delete', 'Remove advert id: '.$id.' for user id: '.$idUserAd.' from database');
                         UResponse::header('Messages', 'Gone', false, 410);
+                        Logger::info('Database', 'Remove advert id: '.$id.' for user id: '.$sessIdUser.' from database');
+                        echo 'Advert id: '.$id.' deleted from database';
                     }
                 } else {
-                    echo 'Forbidden. The request is not allowed.';
-                    Logger::info('Forbidden', 'Remove advert id: '.$id.' for user id: '.$idUserAd.' Not allowed.');
                     UResponse::header('Messages', 'Forbidden', false, 403);
+                    Logger::info('Database', 'Remove advert id: '.$id.' for user id: '.$sessIdUser.' Not allowed.');
+                    echo 'Forbidden. The request is not allowed.';
                 }
             } catch (\PDOException $e) {
                 UResponse::header('Messages', 'Internal Server Error', false, 500);
-                Logger::error('DAOUpdates', $e->getMessage(), 'Delete');
+                Logger::error('Database', 'Failed to remove Advert id: '.$id.' for user id: '.$sessIdUser, $e->getMessage(), 'Delete');
 
             } catch (\Exception $e) {
                 UResponse::header('Messages', 'Internal Server Error', false, 500);

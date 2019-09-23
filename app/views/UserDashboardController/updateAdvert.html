@@ -2,6 +2,8 @@
 
 {% block update_advert_block %}
 
+
+
 <div class="section">
 
     <div class="container">
@@ -10,18 +12,38 @@
                 <div class="notification is-success">
                     <h1 class="title">Update your advert</h1>
                 </div>
-                <form action="/update/{{id}}" method="post" enctype="multipart/form-data">
+
+                {% if vio or success %}
+                <article class="message {{ vio ? 'is-danger' : 'is-link' }}">
+                    <div class="message-header">
+                        <p>{{ vio ? 'Incorrect data fields:' : 'You have successfully updated your advert.' }}</p>
+                    </div>
+                    
+                    {% if vio %}
+                        <div class="message-body">
+                            
+                            {% for i in vio %}
+                                <p>{{i}}</p>
+                            {% endfor %}
+
+                        </div>
+                    {% endif %}
+                    
+                </article>
+                {% endif %}
+
+                <form action="/update/{{advert.id}}" method="post" enctype="multipart/form-data">
                     <div class="field">
                         <label for="title" class="label is-medium">Title*</label>
                         <div class="control">
-                            <input id="title" name="title" class="input is-medium" type="text" placeholder="Name">
+                            <input value="{{advert.title}}" id="title" name="title" class="input is-medium" type="text" placeholder="Name">
                         </div>
                     </div>
                     <div class="field">
                         <label for="body" class="label is-medium">Description</label>
                         <div class="control">
                             <textarea id="body" name="body" class="textarea is-medium"
-                                placeholder="Write a description"></textarea>
+                                placeholder="Write a description">{{advert.body}}</textarea>
                         </div>
                     </div>
                     
@@ -40,6 +62,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 {% endblock %}
