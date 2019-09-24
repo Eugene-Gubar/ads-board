@@ -17,21 +17,21 @@
                         <p>{{ vio ? 'Incorrect data fields:' : 'Thank you for registering' }}</p>
                     </div>
                     <div class="message-body">
-                        
+
                         {% if success %}
                         <p>You can now log in. For log in to enter, use the link below or check back later.</p>
                         <br>
                         <a href="/login">Log in</a>
                         {% endif %}
-                        
+
                         {% for i in vio %}
-                            <p>{{i}}</p>
+                        <p>{{i}}</p>
                         {% endfor %}
 
                     </div>
                 </article>
                 {% endif %}
-                
+
                 <form action="/signup" method="post">
                     <div class="field">
                         <label for="name" class="label is-medium">Name*</label>
