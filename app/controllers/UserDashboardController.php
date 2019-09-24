@@ -27,7 +27,7 @@ class UserDashboardController extends ControllerBase
     { }
 
     /**
-     *@route("/user-dashboard","methods"=>["get"])
+     * @route("/user-dashboard","methods"=>["get"])
      **/
     public function userDashboard()
     {
@@ -38,7 +38,7 @@ class UserDashboardController extends ControllerBase
     }
 
     /**
-     *@route("/add","methods"=>["get", "post"])
+     * @route("/add","methods"=>["get", "post"])
      **/
     public function addAdvert()
     {
@@ -95,6 +95,7 @@ class UserDashboardController extends ControllerBase
 
                     $user = DAO::uGetOne(User::class, USession::get('activeUser')->getId(), false);
                     $adv->setUser($user);
+                    $adv->setTs(date('Y-m-d H:i:s'));
 
                     try {
                         if (DAO::save($adv)) {
@@ -121,7 +122,7 @@ class UserDashboardController extends ControllerBase
     }
 
     /**
-     *@route("/update/{id}","methods"=>["get", "post"])
+     * @route("/update/{id}", "requirements"=>["id"=>"\d+"], "methods"=>["get", "post"])
      **/
     public function updateAdvert($id)
     {
@@ -179,7 +180,7 @@ class UserDashboardController extends ControllerBase
                     
 
                     if (is_array($violations) && sizeof($violations) === 0) {
-
+                        $adv->setTs(date('Y-m-d H:i:s'));
                         try {
                             if (DAO::save($adv)) {
                                 array_push($success, 'The Advert was updated.');
@@ -224,7 +225,7 @@ class UserDashboardController extends ControllerBase
     }
 
     /**
-     *@route("/remove/{id}","requirements"=>["id"=>"\d+"], "methods"=>["get"])
+     * @route("/remove/{id}","requirements"=>["id"=>"\d+"], "methods"=>["get"])
      **/
     public function removeAdvert($id)
     {
@@ -263,8 +264,8 @@ class UserDashboardController extends ControllerBase
             }
 
         } else {
-            echo 'Bad Request';
             UResponse::header('Messages', 'Bad Request', false, 400);
+            echo 'Bad Request';
         }
 
     }

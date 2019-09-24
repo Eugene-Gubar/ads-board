@@ -34,6 +34,11 @@ class Ads
 	private $imageType;
 
 	/**
+	 * @column("name"=>"ts","nullable"=>true,"dbType"=>"timestamp")
+	 **/
+	private $ts;
+
+	/**
 	 * @manyToOne
 	 * @joinColumn("className"=>"models\\User","name"=>"id_user","nullable"=>false)
 	 **/
@@ -87,6 +92,16 @@ class Ads
 	public function setImageType($imageType)
 	{
 		$this->imageType = $imageType;
+	}
+
+	public function getTs()
+	{
+		return $this->ts;
+	}
+
+	public function setTs($ts)
+	{
+		$this->ts = $ts;
 	}
 
 	public function getUser()

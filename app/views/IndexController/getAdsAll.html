@@ -1,0 +1,85 @@
+<!--View associated to getAdsAll action of IndexController controller -->
+
+
+<div class="section">
+
+    <h1 class="title">Board ads</h1>
+
+    {% block ads_block %}
+
+    {% if pages > 1 %}
+    <div class="columns">
+        <div class="column">
+            <div class="is-pulled-right">
+                <p class="is-size-6">Per page:</p>
+                <a class="button {{ (rowsPerPage == 10) ? 'is-active' : '' }}" href="/{{pageNum}}/10">10</a>
+                <a class="button {{ (rowsPerPage == 30) ? 'is-active' : '' }}" href="/{{pageNum}}/30">30</a>
+                <a class="button {{ (rowsPerPage == 50) ? 'is-active' : '' }}" href="/{{pageNum}}/50">50</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <br>
+    <br>
+
+
+    {% if not ads %}
+    <div class="notification is-warning">
+        <h2 class="subtitle">
+            Nothing ads...
+        </h2>
+    </div>
+    {% endif %}
+
+    <div class="columns is-variable is-8 is-multiline">
+        {% for ad in ads %}
+        <div class="column is-one-third">
+            <div class="card">
+                <div class="card-image">
+                    <a href="{{ (ad.imageName) ? "/view/#{ad.id}" : "#"}}" target="_blank">
+                        <figure class="image">
+                            <img
+                                src="{{ (ad.imageName) ? "/public/assets/img/#{ad.imageName}.#{ad.imageType}" : "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNDAiIGhlaWdodD0iNDAiCnZpZXdCb3g9IjAgMCA0MCA0MCIKc3R5bGU9IiBmaWxsOiMwMDAwMDA7Ij48cGF0aCBmaWxsPSIjZGZmMGZlIiBkPSJNMywzNC41Yy0wLjgyNywwLTEuNS0wLjY3My0xLjUtMS41VjExYzAtMC44MjcsMC42NzMtMS41LDEuNS0xLjVoNy43NzdsMi41LTRoMTMuNDQ1bDIuNSw0SDM3IGMwLjgyNywwLDEuNSwwLjY3MywxLjUsMS41djIyYzAsMC44MjctMC42NzMsMS41LTEuNSwxLjVIM3oiPjwvcGF0aD48cGF0aCBmaWxsPSIjNDc4OGM3IiBkPSJNMjYuNDQ2LDZsMi4yMDYsMy41M0wyOC45NDUsMTBoMC41NTRoNy41YzAuMjY1LDAsMC41MTYsMC4xMDUsMC43MDYsMC4yOTUgQzM3Ljg5NSwxMC40ODUsMzgsMTAuNzM1LDM4LDExdjIyYzAsMC41NTEtMC40NDksMS0xLDFIMy4wMDFjLTAuMjY1LDAtMC41MTYtMC4xMDUtMC43MDYtMC4yOTVDMi4xMDUsMzMuNTE1LDIsMzMuMjY1LDIsMzNWMTEgYzAtMC41NTEsMC40NDktMSwxLTFoNy41aDAuNTU0bDAuMjk0LTAuNDdMMTMuNTU0LDZIMjYuNDQ2IE0yNyw1SDEzbC0yLjUsNEgzYy0xLjEsMC0yLDAuOS0yLDJ2MjJjMCwxLjEsMC45MDEsMiwyLjAwMSwySDM3IGMxLjEsMCwyLTAuOSwyLTJWMTFjMC0xLjEtMC45MDEtMi0yLjAwMS0yaC03LjVMMjcsNUwyNyw1eiI+PC9wYXRoPjxwYXRoIGZpbGw9IiM5OGNjZmQiIGQ9Ik0zMCAxM0gzNVYxNkgzMHpNMjAgMjkuNWMtNC42ODcgMC04LjUtMy44MTMtOC41LTguNXMzLjgxMy04LjUgOC41LTguNWM0LjY4NyAwIDguNSAzLjgxMyA4LjUgOC41UzI0LjY4NyAyOS41IDIwIDI5LjV6Ij48L3BhdGg+PHBhdGggZmlsbD0iIzQ3ODhjNyIgZD0iTTIwIDEzYzQuNDExIDAgOCAzLjU4OSA4IDhzLTMuNTg5IDgtOCA4LTgtMy41ODktOC04UzE1LjU4OSAxMyAyMCAxM00yMCAxMmMtNC45NyAwLTkgNC4wMjktOSA5IDAgNC45NyA0LjAyOSA5IDkgOXM5LTQuMDI5IDktOUMyOSAxNi4wMjkgMjQuOTcxIDEyIDIwIDEyTDIwIDEyek04IDEwSDVjLS41NTIgMC0xLS40NDgtMS0xdjBjMC0uNTUyLjQ0OC0xIDEtMWgzYy41NTIgMCAxIC40NDggMSAxdjBDOSA5LjU1MiA4LjU1MiAxMCA4IDEweiI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGQ9Ik0xNS41MywyMC41YzAuMjMtMi4wOSwxLjg4LTMuNzQsMy45Ny0zLjk3Ij48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDc4OGM3IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJNMyAzTDM3IDM3Ij48L3BhdGg+PC9zdmc+"}}">
+                        </figure>
+                    </a>
+                </div>
+                <div class="card-content">
+
+                    <h3 class="title is-5"><a href="{{ (ad.imageName) ? "/view/#{ad.id}" : "#"}}">{{ad.title[0:79]}}</a></h3>
+                    <div class="content">
+                        <p>
+                            {{ad.body[0:254]}}
+                        </p>
+                    </div>
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-5">{{"#{ad.user.name} #{ad.user.lastname}"}}</p>
+                            <p class="subtitle is-6"><span>Email: </span><strong>{{ad.user.email}}</strong></p>
+                        </div>
+                        <div class="media-right">
+                            <span>Phone: <strong>{{ad.user.phone}}</strong></span>
+                            <p><time datetime="2016-1-1">{{ad.ts}}</time></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if pages > 1 %}
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <ul class="pagination-list">
+            {% for p in 1..pages %}
+            <li><a href="/{{p}}/{{rowsPerPage}}"
+                    class="pagination-link {{ (pageNum == loop.index) ? 'is-current' : '' }}" aria-label="Page {{p}}"
+                    aria-current="page">{{p}}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+    {% endif %}
+
+
+    {% endblock %}
+</div>
