@@ -4,7 +4,6 @@ namespace controllers;
 
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\http\UResponse;
-use Ubiquity\utils\http\USession;
 use models\Ads;
 
 
@@ -15,18 +14,8 @@ class IndexController extends ControllerBase
 {
     public function index()
     {
-        $this->loadView("IndexController/index.html");
         $this->getAdsAll(1, 10);
     }
-
-    public function viewSession()
-    {
-        echo '<pre>' . print_r(USession::getAll()) . '</pre><br>';
-        //    $sUser = USession::get('activeUser');
-        //    $sRole = $sUser->getRole();
-        //    echo print_r(USession::get('activeUser')->getId());
-    }
-
 
     /**
      * @route("view/{id}", "requirements"=>["id"=>"\d+"], "methods"=>["get"])
@@ -51,7 +40,7 @@ class IndexController extends ControllerBase
             $ads = DAO::paginate(Ads::class, $pageNum, $rowsPerPage);
             $count = DAO::count(Ads::class);
             $pages = ceil($count / $rowsPerPage);
-            
+
             $this->loadView('IndexController/getAdsAll.html', compact('ads', 'pages', 'pageNum', 'rowsPerPage'));
 
         } else {

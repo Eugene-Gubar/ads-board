@@ -17,14 +17,14 @@
                     </thead>
                     <tbody>
                         {% for ad in ads %}
-                            <tr>
-                                <th>{{loop.index}}</th>
-                                <td><a href="/view/{{ad.id}}" target="_blank">{{ ad.title[0:75] }}</a></td>
-                                <td>
-                                    <a class="button is-success" href="/update/{{ad.id}}" target="_blank">Edit</a>
-                                    <a class="button is-danger" href="/remove/{{ad.id}}" target="_blank">Delete</a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <th>{{loop.index}}</th>
+                            <td><a href="/view/{{ad.id}}">{{ ad.title[0:75] }}</a></td>
+                            <td>
+                                <a class="button is-success" href="/update/{{ad.id}}">Edit</a>
+                                <a class="button is-danger" id="{{ad.id}}" href="/remove/{{ad.id}}">Delete</a>
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -32,4 +32,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('load', function () {
+        $('body').on('click', 'a.button.is-danger', function (event) {
+            event.preventDefault();
+            $(event.target).addClass('is-loading');
+            $.get('/remove/'+event.target.id, function (data) {
+                $(event.target.parentElement.parentElement).remove();
+            });
+        });
+    })
+</script>
+
 {% endblock %}

@@ -245,7 +245,7 @@ class UserDashboardController extends ControllerBase
                     if (DAO::delete(Ads::class, $id)) {
                         UFileSystem::deleteFile($t_dir.$imageHashName.'.'.$imageType);
 
-                        UResponse::header('Messages', 'Gone', false, 410);
+                        UResponse::header('Messages', 'Ok', false, 200);
                         Logger::info('Database', 'Remove advert id: '.$id.' for user id: '.$sessIdUser.' from database');
                         echo 'Advert id: '.$id.' deleted from database';
                     }

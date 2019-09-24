@@ -22,7 +22,7 @@ class SignUpUserController extends ControllerBase
     { }
 
     /**
-     * @route("/signup")
+     * @route("/signup", "name"=>"action.signup")
      **/
     public function signUp()
     {
