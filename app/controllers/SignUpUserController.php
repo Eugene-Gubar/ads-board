@@ -68,7 +68,7 @@ class SignUpUserController extends ControllerBase
                     Logger::warn('Sign up', 'An unsuccessful attempt to register a user. Invalid data fields.');
                 } else {
                     if (DAO::getOne(User::class, 'email=?', false, [$postUser['email']])) {
-                        array_push($violations, 'This mail is already available.');
+                        array_push($violations, 'This email is already available.');
                     } else {
                         if (DAO::save($user)) {
                             array_push($success, 'The user was added to the database');
@@ -86,7 +86,12 @@ class SignUpUserController extends ControllerBase
             $vio = explode('~]*', implode('~]*', $violations));
         }
 
-        $this->loadView('SignUpUserController/signUp.html', compact('vio', 'success'));
+        if (!URequest::isAjax()) {
+            $this->loadView('SignUpUserController/signUp.html', compact('vio', 'success'));
+        } else {
+            $msg = ['error_msg' => $vio, 'success_msg' => $success];
+            echo json_encode($msg);
+        }
     }
 
 }
