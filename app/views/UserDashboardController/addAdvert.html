@@ -16,17 +16,17 @@
                     <div class="message-header">
                         <p>{{ vio ? 'Incorrect data fields:' : 'You have successfully added a new advert.' }}</p>
                     </div>
-                    
-                    {% if vio %}
-                        <div class="message-body">
-                            
-                            {% for i in vio %}
-                                <p>{{i}}</p>
-                            {% endfor %}
 
-                        </div>
+                    {% if vio %}
+                    <div class="message-body">
+
+                        {% for i in vio %}
+                        <p>{{i}}</p>
+                        {% endfor %}
+
+                    </div>
                     {% endif %}
-                    
+
                 </article>
                 {% endif %}
 
@@ -44,7 +44,7 @@
                                 placeholder="Write a description"></textarea>
                         </div>
                     </div>
-                    
+
                     <div class="field">
                         <label for="image">Upload image cover:</label>
                         <br>
@@ -53,13 +53,53 @@
 
                     <div class="field">
                         <div class="control">
-                            <input type="submit" class="is-medium button is-success" value="Submit">
+                            <button type="submit" id="submit" class="is-medium button is-success">Submit</button>
                         </div>
                     </div>
                 </form>
+                <br>
+                <br>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('load', function () {
+        $('form').on('click', '#submit', function (event) {
+            event.preventDefault();
+            
+            $(event.target).addClass('is-loading');
+            var form = this.form;
+            var formData = new FormData(form);
+
+            $.ajax({
+                type: 'POST',
+                url: this.form.action,
+                data: formData,
+                processData: false,
+                contentType: false
+            }).done(function (data) {
+                $(event.target).removeClass('is-loading');
+                var msg = JSON.parse(data);
+                if (msg['error_msg'].length > 0) {
+                    var arr_p = '';
+                    msg['error_msg'].forEach(m => {
+                        arr_p += '<p>'+m+'</p>';
+                    });
+                    $('#message_info').remove();
+                    $('#message_success').remove();
+                    $('.column.is-three-fifths').append('<article id="message_info" class="message is-danger"><div class="message-header"><p>Incorrect data fields:</p></div><div class="message-body"></div> </article>');
+                    $('#message_info > .message-body').append(arr_p);
+                } else {
+                    $('#message_info').remove();
+                    $('#message_success').remove();
+                    $('.column.is-three-fifths').append('<article id="message_success" class="message is-link"><div class="message-header"><p>You have successfully added a new advert.</p></div><div class="message-body"><p>You have added title:</p></div> </article>');
+                    $('#message_success > .message-body').append('<p><strong>'+form.title.value+'</strong></p>');
+                }
+            });
+        });
+    })
+</script>
 
 {% endblock %}

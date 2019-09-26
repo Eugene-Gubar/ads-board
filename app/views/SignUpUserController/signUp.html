@@ -80,7 +80,7 @@
 
                     <div class="field">
                         <div class="control">
-                            <button id="submit" class="button is-medium button is-success">Submit</button>
+                            <button type="submit" id="submit" class="button is-medium button is-success">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -110,6 +110,7 @@
                     $('#message_info > .message-body').append(arr_p);
                 } else {
                     $('#message_info').remove();
+                    $('#message_success').remove();
                     $('.column.is-three-fifths').append('<article id="message_success" class="message is-link"><div class="message-header"><p>Thank you for registering</p></div><div class="message-body"><p>You can now log in. For log in to enter, use the link below or check back later.</p> <br> <a href="/login">Log in</a></div> </article>');    
                 }
             });

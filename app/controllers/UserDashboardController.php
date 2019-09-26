@@ -76,9 +76,9 @@ class UserDashboardController extends ControllerBase
                         array_push($violations, 'Only .WEBP .JPG, .JPEG, .PNG extension files are allowed');
                     }
 
-                    $iFileHashName = $t_dir . basename($iHashName) . '.' . $iType;
+                    $iFileHashName = $t_dir.$iHashName.'.'.$iType;
 
-                    if (file_exists($iFileHashName)) {
+                    if (is_file($iFileHashName)) {
                         array_push($violations, 'File already exists. Try to change name file');
                     } elseif (is_array($violations) && sizeof($violations) === 0) {
 
@@ -163,19 +163,28 @@ class UserDashboardController extends ControllerBase
                             $t_file = UFileSystem::cleanFilePathname($t_dir . basename($_FILES['image']['name']));
                             $newImageType = strtolower(pathinfo($t_file, PATHINFO_EXTENSION));
                             $newImageName = md5(pathinfo($_FILES['image']['name'], PATHINFO_FILENAME));
-                            $newImage = $t_dir . basename($newImageName) . '.' . $newImageType;
+                            $newImage = $t_dir.$newImageName.'.'.$newImageType;
+                            $oldImage = $t_dir.$dbOldImageName.'.'.$dbOldImageType;
 
                             if ($newImageType != 'webp' && $newImageType != 'jpg' && $newImageType != 'png' && $newImageType != 'jpeg') {
                                 array_push($violations, 'Only .WEBP .JPG, .JPEG, .PNG extension files are allowed');
                             }
                             
                             if (is_array($violations) && sizeof($violations) === 0) {
-                                if (move_uploaded_file($_FILES['image']['tmp_name'], $newImage)) {
-                                    UFileSystem::deleteFile($t_dir.$dbOldImageName.'.'.$dbOldImageType);
-                                    $adv->setImageName($newImageName);
-                                    $adv->setImageType($newImageType);
+
+                                if (!is_file($newImage)) {
+                                    if (move_uploaded_file($_FILES['image']['tmp_name'], $newImage)) {
+                                    
+                                        if (is_file($oldImage) && $oldImage !== $newImage)
+                                            UFileSystem::deleteFile($oldImage);
+    
+                                        $adv->setImageName($newImageName);
+                                        $adv->setImageType($newImageType);
+                                    } else {
+                                        array_push($violations, 'Failed to write file to server. Try again');
+                                    }
                                 } else {
-                                    array_push($violations, 'Failed to write file to server. Try again');
+                                    array_push($violations, 'File already exists. Try to change name file');
                                 }
                             }
                             
@@ -191,7 +200,6 @@ class UserDashboardController extends ControllerBase
                             if (DAO::save($adv)) {
                                 array_push($success, 'The Advert was updated.');
                                 Logger::info('Database', 'The Advert was updated in the database for user id: '.$sessIdUser);
-                                echo 'The Advert was updated.';
                             }
                         } catch (\PDOException $e) {
                             UResponse::header('Messages', 'Internal Server Error', false, 500);
@@ -208,9 +216,6 @@ class UserDashboardController extends ControllerBase
             $idUserAd = $adv->getUser()->getId();
             if ($idUserAd === $sessIdUser) {
                 $advert = $adv;
-                
-                // echo '<pre>'.print_r($advert).'</pre>';
-
             } else {
                 UResponse::header('Messages', 'Forbidden', false, 403);
                 Logger::info('Forbidden', 'The request is not allowed id: ' . $id . ' for user id: ' . $sessIdUser);
@@ -252,11 +257,13 @@ class UserDashboardController extends ControllerBase
                 $imageHashName = $adv->getImageName();
                 $imageType = $adv->getImageType();
                 $idUserAd = $adv->getUser()->getId();
+                $imageFile = $t_dir.$imageHashName.'.'.$imageType;
 
                 if ($idUserAd === $sessIdUser) {
                     if (DAO::delete(Ads::class, $id)) {
-                        UFileSystem::deleteFile($t_dir.$imageHashName.'.'.$imageType);
-
+                        if (is_file($imageFile))
+                            UFileSystem::deleteFile($imageFile);
+                        
                         UResponse::header('Messages', 'Ok', false, 200);
                         Logger::info('Database', 'Remove advert id: '.$id.' for user id: '.$sessIdUser.' from database');
                         echo 'Advert id: '.$id.' deleted from database';
