@@ -118,7 +118,13 @@ class UserDashboardController extends ControllerBase
             $vio = explode('~]*', implode('~]*', $violations));
         }
 
-        $this->loadView('UserDashboardController/addAdvert.html', compact('vio', 'success'));
+        if (!URequest::isAjax()) {
+            $this->loadView('UserDashboardController/addAdvert.html', compact('vio', 'success'));
+        } else {
+            $msg = ['error_msg' => $vio, 'success_msg' => $success];
+            echo json_encode($msg);
+        }
+
     }
 
     /**
@@ -221,7 +227,13 @@ class UserDashboardController extends ControllerBase
             $vio = explode('~]*', implode('~]*', $violations));
         }
 
-        $this->loadView('UserDashboardController/updateAdvert.html', compact('advert', 'vio', 'success'));
+        if (!URequest::isAjax()) {
+            $this->loadView('UserDashboardController/updateAdvert.html', compact('advert', 'vio', 'success'));
+        } else {
+            $msg = ['error_msg' => $vio, 'success_msg' => $success];
+            echo json_encode($msg);
+        }
+
     }
 
     /**

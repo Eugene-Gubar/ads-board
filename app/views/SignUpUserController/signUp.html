@@ -37,7 +37,6 @@
                         <label for="name" class="label is-medium">Name*</label>
                         <div class="control">
                             <input id="name" name="name" class="input is-medium" type="text" placeholder="Name">
-                            <p class="help is-danger"></p>
                         </div>
                     </div>
 
@@ -46,7 +45,6 @@
                         <div class="control">
                             <input id="lastname" name="lastname" class="input is-medium" type="text"
                                 placeholder="Lastname">
-                            <p class="help is-danger"></p>
                         </div>
                     </div>
 
@@ -55,7 +53,6 @@
                         <div class="control">
                             <input id="email" name="email" class="input is-medium" type="email"
                                 placeholder="Your Email">
-                            <p class="help is-danger"></p>
                         </div>
                     </div>
 
@@ -63,7 +60,6 @@
                         <label for="phone" class="label is-medium">Phone*</label>
                         <div class="control">
                             <input id="phone" name="phone" class="input is-medium" type="text" placeholder="Phone">
-                            <p class="help is-danger"></p>
                         </div>
                     </div>
 
@@ -71,7 +67,6 @@
                         <label for="password" class="label is-medium">Password*</label>
                         <div class="control">
                             <input id="password" name="password" class="input is-medium" type="password" placeholder="Password">
-                            <p class="help is-danger"></p>
                         </div>
                     </div>
 
@@ -100,36 +95,23 @@
     window.addEventListener('load', function () {
         $('form').on('click', '#submit', function (event) {
             event.preventDefault();
-            console.log($('#signup_form').serialize());
             $(event.target).addClass('is-loading');
             $.post('/signup', $('#signup_form').serialize(), function (data) {
                 $(event.target).removeClass('is-loading');
-                console.log(data);
                 var msg = JSON.parse(data);
-                console.log(msg);
-                var msg_info_error = {
-                    email: '',
-                    name: '',
-                    lastname: '',
-                    password: '',
-                    phone: ''
-                };
                 if (msg['error_msg'].length > 0) {
+                    var arr_p = '';
                     msg['error_msg'].forEach(m => {
-                        Object.keys(msg_info_error).forEach(k => {
-                            if (m.search(new RegExp('\\b' + k + '\\b', 'g')) >= 0)
-                                msg_info_error[k] = m;
-                        });
+                        arr_p += '<p>'+m+'</p>';
                     });
+                    $('#message_info').remove();
                     $('#message_success').remove();
+                    $('.column.is-three-fifths').append('<article id="message_info" class="message is-danger"><div class="message-header"><p>Incorrect data fields:</p></div><div class="message-body"></div> </article>');
+                    $('#message_info > .message-body').append(arr_p);
                 } else {
-                    console.log(msg['success_msg']);
+                    $('#message_info').remove();
                     $('.column.is-three-fifths').append('<article id="message_success" class="message is-link"><div class="message-header"><p>Thank you for registering</p></div><div class="message-body"><p>You can now log in. For log in to enter, use the link below or check back later.</p> <br> <a href="/login">Log in</a></div> </article>');    
                 }
-                Object.keys(msg_info_error).forEach(k => {
-                    var node = $('#'+k)[0].nextElementSibling;
-                    $(node).text(msg_info_error[k]);
-                });
             });
         });
     })
