@@ -22,7 +22,7 @@
                             <td><a href="/view/{{ad.id}}">{{ ad.title[0:75] }}</a></td>
                             <td>
                                 <a class="button is-success" href="/update/{{ad.id}}">Edit</a>
-                                <a class="button is-danger" id="{{ad.id}}" href="/remove/{{ad.id}}">Delete</a>
+                                <a class="button is-danger btn_ajax_post_remove" id="{{ad.id}}" href="/remove/{{ad.id}}">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -35,7 +35,7 @@
 
 <script>
     window.addEventListener('load', function () {
-        $('body').on('click', 'a.button.is-danger', function (event) {
+        $('body').on('click', 'a.button.is-danger.btn_ajax_post_remove', function (event) {
             event.preventDefault();
             $(event.target).addClass('is-loading');
             $.get('/remove/'+event.target.id, function (data) {

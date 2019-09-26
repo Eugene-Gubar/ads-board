@@ -41,7 +41,7 @@ class IndexController extends ControllerBase
             $count = DAO::count(Ads::class);
             $pages = ceil($count / $rowsPerPage);
 
-            $this->loadView('IndexController/getAdsAll.html', compact('ads', 'pages', 'pageNum', 'rowsPerPage'));
+            $this->loadView('IndexController/getAdsAll.html', compact('ads', 'pages', 'pageNum', 'rowsPerPage', 'count'));
 
         } else {
             UResponse::header('Messages', 'Bad Request', false, 400);
