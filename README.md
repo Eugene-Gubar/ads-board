@@ -32,14 +32,9 @@ Make use of the many generators for code, try `Ubiquity help` for more details
 Run:
 `composer dump-autoload --optimize --no-dev --classmap-authoritative`
 
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [Ubiquity website](https://ubiquity.kobject.net/)
-* [Guide](http://micro-framework.readthedocs.io/en/latest/?badge=latest)
-* [Doc API](https://api.kobject.net/ubiquity/)
-* [Twig documentation](https://twig.symfony.com)
-* [Semantic-UI](https://semantic-ui.com)
+## Docker
+* `docker build -t board:dev .`
+* `docker run -p 80:80 board:dev`
+* [:your_docker_ip]/phpmyadmin
+  login: admin, password: [see console docker - it`s auto generation]
+* Create 'ads' and 'user' [table sql](https://github.com/Eugene-Gubar/ads-board/blob/master/table.sql)
