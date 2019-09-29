@@ -1,13 +1,13 @@
 <?php
 return array(
-	"siteUrl" => "http://127.0.0.1/",
+	"siteUrl" => "https://deploy-advert-board.herokuapp.com/",
 	"database" => [
-		"type" => "mysql",
-		"dbName" => "",
-		"serverName" => "127.0.0.1",
-		"port" => "3306",
-		"user" => "",
-		"password" => "",
+		"type" => "pgsql",
+		"dbName" => "d96hdsptjm9ldh",
+		"serverName" => "ec2-54-228-243-238.eu-west-1.compute.amazonaws.com",
+		"port" => "5432",
+		"user" => "yghrlyjtrhiovc",
+		"password" => "59379cbbfec6115cf29004098ea6c91c7a25e5b13cfbf52947da907d83830dd4",
 		"options" => [],
 		"cache" => false
 	],
