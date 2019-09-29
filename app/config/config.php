@@ -2,12 +2,12 @@
 return array(
 	"siteUrl" => "https://deploy-advert-board.herokuapp.com/",
 	"database" => [
-		"type" => "pgsql",
-		"dbName" => "d96hdsptjm9ldh",
-		"serverName" => "ec2-54-228-243-238.eu-west-1.compute.amazonaws.com",
-		"port" => "5432",
-		"user" => "yghrlyjtrhiovc",
-		"password" => "59379cbbfec6115cf29004098ea6c91c7a25e5b13cfbf52947da907d83830dd4",
+		"type" => "mysql",
+		"dbName" => "rHtBW98luX",
+		"serverName" => "remotemysql.com",
+		"port" => "3306",
+		"user" => "rHtBW98luX",
+		"password" => "JhTzhLBYmA",
 		"options" => [],
 		"cache" => false
 	],
