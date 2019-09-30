@@ -3,11 +3,11 @@ return array(
 	"siteUrl" => "https://deploy-advert-board.herokuapp.com/",
 	"database" => [
 		"type" => "mysql",
-		"dbName" => "rHtBW98luX",
+		"dbName" => "5guXXl7T6b",
 		"serverName" => "remotemysql.com",
 		"port" => "3306",
-		"user" => "rHtBW98luX",
-		"password" => "JhTzhLBYmA",
+		"user" => "5guXXl7T6b",
+		"password" => "6gXBHqZaCG",
 		"options" => [],
 		"cache" => false
 	],
