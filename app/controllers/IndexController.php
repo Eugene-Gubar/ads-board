@@ -37,7 +37,7 @@ class IndexController extends ControllerBase
     {
         if ($pageNum > 0 && $rowsPerPage > 0) {
 
-            $ads = DAO::paginate(Ads::class, $pageNum, $rowsPerPage);
+            $ads = DAO::paginate(Ads::class, $pageNum, $rowsPerPage, 'ORDER BY id DESC');
             $count = DAO::count(Ads::class);
             $pages = ceil($count / $rowsPerPage);
 
