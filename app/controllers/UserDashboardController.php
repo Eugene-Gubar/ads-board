@@ -94,6 +94,7 @@ class UserDashboardController extends ControllerBase
                 if (is_array($violations) && sizeof($violations) === 0) {
 
                     $user = DAO::uGetOne(User::class, USession::get('activeUser')->getId(), false);
+                    echo '<pre>'.USession::get('activeUser')->getId().'</pre>';
                     $adv->setUser($user);
                     $adv->setTs(date('Y-m-d H:i:s'));
 
