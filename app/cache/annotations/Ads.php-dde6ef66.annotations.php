@@ -11,8 +11,7 @@ return array(
 ),
   'models\\Ads::$id' => array(
     array('#name' => 'id', '#type' => 'Ubiquity\\annotations\\IdAnnotation'),
-    array('#name' => 'column', '#type' => 'Ubiquity\\annotations\\ColumnAnnotation', "name"=>"id","nullable"=>false,"dbType"=>"int(11)"),
-    array('#name' => 'validator', '#type' => 'Ubiquity\\annotations\\ValidatorAnnotation', "id","constraints"=>array("autoinc"=>true))
+    array('#name' => 'column', '#type' => 'Ubiquity\\annotations\\ColumnAnnotation', "name"=>"id","nullable"=>false,"dbType"=>"int(11)")
   ),
   'models\\Ads::$title' => array(
     array('#name' => 'column', '#type' => 'Ubiquity\\annotations\\ColumnAnnotation', "name"=>"title","nullable"=>false,"dbType"=>"varchar(255)"),

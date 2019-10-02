@@ -34,7 +34,7 @@ class UserDashboardController extends ControllerBase
 
         $ads = DAO::getOne(User::class, USession::get('activeUser')->getId())->getAdss();
         echo '<pre>dash'.USession::get('activeUser')->getId().'</pre>';
-        echo '<pre>ads'.$ads.'</pre>';
+        echo '<pre>ads'.print_r($ads).'</pre>';
 
         $this->loadView('UserDashboardController/userDashboard.html', compact('ads'));
     }
@@ -97,11 +97,11 @@ class UserDashboardController extends ControllerBase
 
                     $user = DAO::uGetOne(User::class, USession::get('activeUser')->getId(), false);
                     echo '<pre>'.USession::get('activeUser')->getId().'</pre>';
-                    echo '<pre>'.$user.'</pre>';
+                    echo '<pre>'.print_r($user).'</pre>';
                     $adv->setUser($user);
                     $adv->setTs(date('Y-m-d H:i:s'));
 
-                    echo '<pre>'.$adv.'</pre>';
+                    echo '<pre>'.print_r($adv).'</pre>';
 
                     try {
                         if (DAO::save($adv)) {
