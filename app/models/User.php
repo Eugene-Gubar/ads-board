@@ -47,7 +47,7 @@ class User
 	private $role;
 
 	/**
-	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Ads")
+	 * @oneToMany("mappedBy"=>"User","className"=>"models\\Ads")
 	 **/
 	private $adss;
 

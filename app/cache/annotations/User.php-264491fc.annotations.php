@@ -38,7 +38,7 @@ return array(
     array('#name' => 'column', '#type' => 'Ubiquity\\annotations\\ColumnAnnotation', "name"=>"role","nullable"=>false,"dbType"=>"varchar(10)")
   ),
   'models\\User::$adss' => array(
-    array('#name' => 'oneToMany', '#type' => 'Ubiquity\\annotations\\OneToManyAnnotation', "mappedBy"=>"user","className"=>"models\\Ads")
+    array('#name' => 'oneToMany', '#type' => 'Ubiquity\\annotations\\OneToManyAnnotation', "mappedBy"=>"User","className"=>"models\\Ads")
   ),
 );
 
