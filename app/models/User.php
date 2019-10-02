@@ -36,8 +36,8 @@ class User
 	private $password;
 
 	/**
-	 * @column("name"=>"phone","nullable"=>false,"dbType"=>"varchar(20)")
-	 * @validator("length","constraints"=>array("max"=>20,"notNull"=>true))
+	 * @column("name"=>"phone","nullable"=>false,"dbType"=>"varchar(25)")
+	 * @validator("length","constraints"=>array("max"=>25,"notNull"=>true))
 	 **/
 	private $phone;
 
@@ -47,7 +47,7 @@ class User
 	private $role;
 
 	/**
-	 * @oneToMany("mappedBy"=>"User","className"=>"models\\Ads")
+	 * @oneToMany("mappedBy"=>"user","className"=>"models\\Ads")
 	 **/
 	private $adss;
 
